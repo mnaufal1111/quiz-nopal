@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BiologyQuiz Pro - Kuis Biologi Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        secondary: '#059669',
+                        accent: '#34D399'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        @keyframes rotate-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+        
+        .animate-bounce-gentle {
+            animation: bounce-gentle 2s ease-in-out infinite;
+        }
+        
+        .animate-pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        
+        .animate-rotate-slow {
+            animation: rotate-slow 8s linear infinite;
+        }
+        
+        .animate-wiggle {
+            animation: wiggle 2.5s ease-in-out infinite;
+        }
+        
+        .animate-delay-1 {
+            animation-delay: 0.5s;
+        }
+        
+        .animate-delay-2 {
+            animation-delay: 1s;
+        }
+        
+        .animate-delay-3 {
+            animation-delay: 1.5s;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white font-bold">🧬</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">BiologyQuiz Pro</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="homeBtn" onclick="goHome()" class="text-gray-600 hover:text-primary transition-colors flex items-center">
+                        <span class="mr-1">🏠</span> Home
+                    </button>
+                    <button id="loginBtn" class="text-gray-600 hover:text-primary transition-colors">Masuk</button>
+                    <button id="registerBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">Daftar</button>
+                    <div id="userMenu" class="hidden flex items-center space-x-4">
+                        <span id="userName" class="text-gray-700"></span>
+                        <button id="logoutBtn" class="text-red-600 hover:text-red-800">Keluar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Landing Page -->
+        <div id="landingPage" class="text-center">
+            <div class="mb-12">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4">
+                    Kuis Biologi <span class="text-primary">Interaktif</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8">Tingkatkan pengetahuan biologi Anda dari SD hingga tingkat Olimpiade</p>
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="text-2xl mb-2 animate-rotate-slow">🧬</div>
+                        <div class="font-semibold">Genetika</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="text-2xl mb-2 animate-pulse-glow animate-delay-1">🫀</div>
+                        <div class="font-semibold">Fisiologi</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="text-2xl mb-2 animate-wiggle animate-delay-2">⚗️</div>
+                        <div class="font-semibold">Biokimia</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="text-2xl mb-2 animate-bounce-gentle animate-delay-3">🌿</div>
+                        <div class="font-semibold">Ekologi</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="text-2xl mb-2 animate-wiggle">🦕</div>
+                        <div class="font-semibold">Evolusi</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="text-2xl mb-2 animate-pulse-glow animate-delay-2">🔬</div>
+                        <div class="font-semibold">Biologi Molekuler</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level Selection -->
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow cursor-pointer" onclick="selectEducationLevel('SD')">
+                    <div class="text-4xl mb-4 animate-bounce-gentle">📚</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Sekolah Dasar</h3>
+                    <p class="text-gray-600 mb-4">Kelas 1-6, 5 level per kelas</p>
+                    <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">30 Level Total</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow cursor-pointer" onclick="selectEducationLevel('SMP')">
+                    <div class="text-4xl mb-4 animate-wiggle animate-delay-1">🎓</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Sekolah Menengah Pertama</h3>
+                    <p class="text-gray-600 mb-4">Kelas 1-3, 5 level per kelas</p>
+                    <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">15 Level Total</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow cursor-pointer" onclick="selectEducationLevel('SMA')">
+                    <div class="text-4xl mb-4 animate-pulse-glow animate-delay-2">🏆</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Sekolah Menengah Atas</h3>
+                    <p class="text-gray-600 mb-4">Kelas 1-3, 5 level per kelas</p>
+                    <div class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">15 Level Total</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold mb-6 text-center">Masuk ke Akun</h2>
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="loginEmail" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <input type="password" id="loginPassword" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary" required>
+                    </div>
+                    <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors">Masuk</button>
+                </form>
+                <button onclick="closeModal('loginModal')" class="mt-4 w-full text-gray-600 hover:text-gray-800">Batal</button>
+            </div>
+        </div>
+
+        <!-- Register Modal -->
+        <div id="registerModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold mb-6 text-center">Daftar Akun Baru</h2>
+                <form id="registerForm">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Nama Lengkap</label>
+                        <input type="text" id="registerName" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="registerEmail" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <input type="password" id="registerPassword" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary" required>
+                    </div>
+                    <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors">Daftar</button>
+                </form>
+                <button onclick="closeModal('registerModal')" class="mt-4 w-full text-gray-600 hover:text-gray-800">Batal</button>
+            </div>
+        </div>
+
+        <!-- Level Selection Page -->
+        <div id="levelSelection" class="hidden">
+            <div class="text-center mb-8">
+                <button onclick="goBack()" class="mb-4 text-primary hover:text-secondary">← Kembali</button>
+                <h2 id="levelTitle" class="text-3xl font-bold text-gray-800 mb-4"></h2>
+                <p class="text-gray-600">Pilih kelas dan level yang ingin Anda mainkan</p>
+            </div>
+            <div id="classSelection" class="grid gap-6"></div>
+        </div>
+
+        <!-- Quiz Page -->
+        <div id="quizPage" class="hidden">
+            <div class="max-w-4xl mx-auto">
+                <!-- Quiz Header -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 id="quizTitle" class="text-xl font-bold text-gray-800"></h3>
+                            <p id="quizProgress" class="text-gray-600"></p>
+                        </div>
+                        <div class="text-right">
+                            <div id="timer" class="text-2xl font-bold text-red-600"></div>
+                            <div id="score" class="text-primary font-semibold"></div>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                    <div id="questionText" class="text-lg text-gray-800 mb-6"></div>
+                    <div id="optionsContainer" class="space-y-3"></div>
+                </div>
+
+                <!-- Quiz Controls -->
+                <div class="flex justify-between">
+                    <button id="prevBtn" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors disabled:opacity-50" disabled>Sebelumnya</button>
+                    <button id="nextBtn" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors">Selanjutnya</button>
+                    <button id="submitBtn" class="hidden bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">Selesai</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div id="resultsPage" class="hidden">
+            <div class="max-w-2xl mx-auto text-center">
+                <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                    <div class="text-6xl mb-4 animate-bounce-gentle">🎉</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Kuis Selesai!</h2>
+                    <div class="text-4xl font-bold text-primary mb-2" id="finalScore"></div>
+                    <div class="text-gray-600 mb-6" id="finalDetails"></div>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600" id="correctAnswers"></div>
+                            <div class="text-green-800">Benar</div>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-red-600" id="wrongAnswers"></div>
+                            <div class="text-red-800">Salah</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Answer Review -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Review Jawaban</h3>
+                    <div id="answerReview" class="space-y-4"></div>
+                </div>
+
+                <div class="flex justify-center space-x-4">
+                    <button onclick="restartQuiz()" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors">Main Lagi</button>
+                    <button onclick="goToLevelSelection()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors">Pilih Level Lain</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Materials Page -->
+        <div id="materialsPage" class="hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-8">
+                    <button onclick="goHome()" class="mb-4 text-primary hover:text-secondary">← Kembali</button>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4"><span class="animate-rotate-slow">📚</span> Materi Biologi</h2>
+                    <p class="text-gray-600">Pelajari konsep dasar biologi untuk setiap jenjang pendidikan</p>
+                </div>
+
+                <!-- Education Level Selection for Materials -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <button onclick="showMaterialLevel('SD')" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow text-left">
+                        <div class="text-3xl mb-3 animate-bounce-gentle">📚</div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Materi SD</h3>
+                        <p class="text-gray-600">Pengenalan dasar makhluk hidup dan lingkungan</p>
+                    </button>
+                    <button onclick="showMaterialLevel('SMP')" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow text-left">
+                        <div class="text-3xl mb-3 animate-wiggle animate-delay-1">🎓</div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Materi SMP</h3>
+                        <p class="text-gray-600">Sistem organ dan proses kehidupan</p>
+                    </button>
+                    <button onclick="showMaterialLevel('SMA')" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow text-left">
+                        <div class="text-3xl mb-3 animate-pulse-glow animate-delay-2">🏆</div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Materi SMA</h3>
+                        <p class="text-gray-600">Biologi molekuler dan genetika lanjutan</p>
+                    </button>
+                </div>
+
+                <!-- Material Content -->
+                <div id="materialContent" class="hidden">
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 id="materialTitle" class="text-2xl font-bold text-gray-800"></h3>
+                            <button onclick="showMaterials()" class="text-primary hover:text-secondary">← Kembali ke Pilihan</button>
+                        </div>
+                        <div id="materialTopics" class="grid md:grid-cols-2 gap-6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div id="leaderboard" class="hidden">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4"><span class="animate-pulse-glow">🏆</span> Leaderboard</h2>
+                    <p class="text-gray-600">Peringkat pemain terbaik</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div id="leaderboardList" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Brand Section -->
+                <div class="col-span-1">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white font-bold animate-rotate-slow">🧬</span>
+                        </div>
+                        <span class="text-xl font-bold">BiologyQuiz Pro</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">Platform pembelajaran biologi interaktif untuk siswa SD hingga SMA dengan sistem level progresif.</p>
+                    <div class="flex space-x-4">
+                        <span class="text-2xl animate-pulse-glow">📱</span>
+                        <span class="text-2xl animate-wiggle animate-delay-1">💻</span>
+                        <span class="text-2xl animate-bounce-gentle animate-delay-2">🎓</span>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-semibold mb-4">Menu Utama</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="goHome()" class="text-gray-300 hover:text-primary transition-colors">🏠 Beranda</a></li>
+                        <li><a href="#" onclick="showMaterials()" class="text-gray-300 hover:text-primary transition-colors">📚 Materi</a></li>
+                        <li><a href="#" onclick="selectEducationLevel('SD')" class="text-gray-300 hover:text-primary transition-colors">📖 Sekolah Dasar</a></li>
+                        <li><a href="#" onclick="selectEducationLevel('SMP')" class="text-gray-300 hover:text-primary transition-colors">🎓 SMP</a></li>
+                        <li><a href="#" onclick="selectEducationLevel('SMA')" class="text-gray-300 hover:text-primary transition-colors">🏆 SMA</a></li>
+                        <li><a href="#" onclick="showLeaderboard()" class="text-gray-300 hover:text-primary transition-colors">🏅 Leaderboard</a></li>
+                    </ul>
+                </div>
+
+                <!-- Topics -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-semibold mb-4">Topik Biologi</h3>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300 flex items-center"><span class="mr-2 animate-rotate-slow">🧬</span> Genetika</li>
+                        <li class="text-gray-300 flex items-center"><span class="mr-2 animate-pulse-glow">🫀</span> Fisiologi</li>
+                        <li class="text-gray-300 flex items-center"><span class="mr-2 animate-wiggle">⚗️</span> Biokimia</li>
+                        <li class="text-gray-300 flex items-center"><span class="mr-2 animate-bounce-gentle">🌿</span> Ekologi</li>
+                        <li class="text-gray-300 flex items-center"><span class="mr-2 animate-wiggle animate-delay-1">🦕</span> Evolusi</li>
+                        <li class="text-gray-300 flex items-center"><span class="mr-2 animate-pulse-glow animate-delay-2">🔬</span> Biologi Molekuler</li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Info -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-semibold mb-4">Informasi</h3>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300 flex items-center"><span class="mr-2">📧</span> info@bioquizpro.com</li>
+                        <li class="text-gray-300 flex items-center"><span class="mr-2">📞</span> +62 21 1234 5678</li>
+                        <li class="text-gray-300 flex items-center"><span class="mr-2">📍</span> Jakarta, Indonesia</li>
+                        <li class="text-gray-300 flex items-center"><span class="mr-2">⏰</span> 24/7 Online</li>
+                    </ul>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-400">Sistem Level Progresif:</p>
+                        <p class="text-sm text-gray-300">✓ 60 Level Total</p>
+                        <p class="text-sm text-gray-300">✓ Unlock Bertahap</p>
+                        <p class="text-sm text-gray-300">✓ Tracking Progress</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-400 text-sm mb-4 md:mb-0">
+                    © 2024 BiologyQuiz Pro. Semua hak dilindungi. Platform pembelajaran biologi interaktif.
+                </div>
+                <div class="flex space-x-6 text-sm">
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors">Kebijakan Privasi</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors">Syarat & Ketentuan</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors">Bantuan</a>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-primary">60+</div>
+                    <div class="text-sm text-gray-300">Level Tersedia</div>
+                </div>
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-primary">300+</div>
+                    <div class="text-sm text-gray-300">Soal Biologi</div>
+                </div>
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-primary">6</div>
+                    <div class="text-sm text-gray-300">Topik Utama</div>
+                </div>
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-primary">24/7</div>
+                    <div class="text-sm text-gray-300">Akses Online</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global Variables
+        let currentUser = null;
+        let currentEducationLevel = '';
+        let currentClass = 0;
+        let currentLevel = 0;
+        let currentQuestionIndex = 0;
+        let currentQuestions = [];
+        let userAnswers = [];
+        let quizTimer = null;
+        let timeLeft = 300; // 5 minutes
+        let score = 0;
+
+        // Sample Questions Database
+        const questionsDB = {
+            SD: {
+                1: {
+                    1: [
+                        {
+                            question: "Bagian tubuh manusia yang berfungsi untuk bernapas adalah?",
+                            options: ["Jantung", "Paru-paru", "Hati", "Ginjal"],
+                            correct: 1,
+                            explanation: "Paru-paru adalah organ yang berfungsi untuk bernapas, mengambil oksigen dan mengeluarkan karbon dioksida."
+                        },
+                        {
+                            question: "Hewan yang hidup di air dan bernapas dengan insang adalah?",
+                            options: ["Kucing", "Ikan", "Burung", "Sapi"],
+                            correct: 1,
+                            explanation: "Ikan hidup di air dan bernapas menggunakan insang untuk mengambil oksigen dari air."
+                        },
+                        {
+                            question: "Tumbuhan membutuhkan sinar matahari untuk?",
+                            options: ["Tidur", "Fotosintesis", "Bergerak", "Bernyanyi"],
+                            correct: 1,
+                            explanation: "Tumbuhan membutuhkan sinar matahari untuk fotosintesis, proses pembuatan makanan."
+                        },
+                        {
+                            question: "Bagian tumbuhan yang berfungsi menyerap air adalah?",
+                            options: ["Daun", "Akar", "Bunga", "Buah"],
+                            correct: 1,
+                            explanation: "Akar berfungsi menyerap air dan mineral dari tanah untuk kebutuhan tumbuhan."
+                        },
+                        {
+                            question: "Hewan yang memakan tumbuhan disebut?",
+                            options: ["Karnivora", "Herbivora", "Omnivora", "Insektivora"],
+                            correct: 1,
+                            explanation: "Herbivora adalah hewan yang memakan tumbuhan sebagai makanan utamanya."
+                        }
+                    ]
+                }
+            },
+            SMP: {
+                1: {
+                    1: [
+                        {
+                            question: "Proses fotosintesis pada tumbuhan menghasilkan?",
+                            options: ["Karbon dioksida dan air", "Glukosa dan oksigen", "Nitrogen dan fosfor", "Protein dan lemak"],
+                            correct: 1,
+                            explanation: "Fotosintesis menghasilkan glukosa sebagai makanan tumbuhan dan oksigen sebagai produk sampingan."
+                        },
+                        {
+                            question: "Organel sel yang berfungsi sebagai pusat kontrol sel adalah?",
+                            options: ["Mitokondria", "Nukleus", "Ribosom", "Vakuola"],
+                            correct: 1,
+                            explanation: "Nukleus adalah pusat kontrol sel yang mengandung DNA dan mengatur aktivitas sel."
+                        },
+                        {
+                            question: "Sistem peredaran darah manusia terdiri dari?",
+                            options: ["Jantung dan pembuluh darah", "Paru-paru dan trakea", "Hati dan empedu", "Ginjal dan ureter"],
+                            correct: 0,
+                            explanation: "Sistem peredaran darah terdiri dari jantung sebagai pompa dan pembuluh darah sebagai jalur transportasi."
+                        },
+                        {
+                            question: "Hormon yang mengatur kadar gula darah adalah?",
+                            options: ["Adrenalin", "Insulin", "Tiroksin", "Testosteron"],
+                            correct: 1,
+                            explanation: "Insulin diproduksi oleh pankreas dan berfungsi mengatur kadar gula darah."
+                        },
+                        {
+                            question: "Proses pencernaan protein dimulai di?",
+                            options: ["Mulut", "Lambung", "Usus halus", "Usus besar"],
+                            correct: 1,
+                            explanation: "Pencernaan protein dimulai di lambung dengan bantuan enzim pepsin dalam suasana asam."
+                        }
+                    ]
+                }
+            },
+            SMA: {
+                1: {
+                    1: [
+                        {
+                            question: "Dalam respirasi seluler, ATP paling banyak dihasilkan pada tahap?",
+                            options: ["Glikolisis", "Siklus Krebs", "Transport elektron", "Fermentasi"],
+                            correct: 2,
+                            explanation: "Transport elektron menghasilkan ATP paling banyak (sekitar 32-34 ATP) dalam respirasi seluler."
+                        },
+                        {
+                            question: "Hukum Mendel I menyatakan bahwa?",
+                            options: ["Gen berpisah secara bebas", "Alel berpisah saat pembentukan gamet", "Sifat diwariskan bersama", "Mutasi terjadi spontan"],
+                            correct: 1,
+                            explanation: "Hukum Mendel I (segregasi) menyatakan bahwa alel berpisah saat pembentukan gamet."
+                        },
+                        {
+                            question: "Struktur DNA yang menghubungkan basa nitrogen adalah?",
+                            options: ["Ikatan peptida", "Ikatan hidrogen", "Ikatan ionik", "Ikatan kovalen"],
+                            correct: 1,
+                            explanation: "Basa nitrogen dalam DNA dihubungkan oleh ikatan hidrogen (A-T: 2 ikatan, G-C: 3 ikatan)."
+                        },
+                        {
+                            question: "Proses transkripsi menghasilkan?",
+                            options: ["DNA", "mRNA", "Protein", "Ribosom"],
+                            correct: 1,
+                            explanation: "Transkripsi adalah proses pembentukan mRNA dari template DNA di dalam nukleus."
+                        },
+                        {
+                            question: "Enzim yang memutus ikatan fosfodiester dalam DNA adalah?",
+                            options: ["DNA polimerase", "RNA polimerase", "Endonuklease", "Ligase"],
+                            correct: 2,
+                            explanation: "Endonuklease adalah enzim yang memotong ikatan fosfodiester di dalam molekul DNA."
+                        }
+                    ]
+                }
+            }
+        };
+
+        // Sample Users Database (simulated)
+        let usersDB = [
+            { id: 1, name: "Admin", email: "admin@bioquiz.com", password: "admin123", role: "admin", totalScore: 0, completedLevels: {} },
+            { id: 2, name: "Siswa Demo", email: "siswa@demo.com", password: "demo123", role: "user", totalScore: 850, completedLevels: {
+                'SD-1-1': true, 'SD-1-2': true, 'SD-1-3': true,
+                'SMP-1-1': true, 'SMP-1-2': true,
+                'SMA-1-1': true
+            }}
+        ];
+
+        // Materials Database
+        const materialsDB = {
+            SD: {
+                title: "Materi Biologi Sekolah Dasar",
+                topics: [
+                    {
+                        title: "🌱 Pengenalan Makhluk Hidup",
+                        icon: "🌱",
+                        content: `
+                            <h4 class="font-semibold mb-2">Ciri-ciri Makhluk Hidup:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li>Bernapas (membutuhkan oksigen)</li>
+                                <li>Membutuhkan makanan dan air</li>
+                                <li>Tumbuh dan berkembang</li>
+                                <li>Bergerak</li>
+                                <li>Berkembang biak</li>
+                                <li>Peka terhadap rangsangan</li>
+                            </ul>
+                            <p class="text-gray-600">Semua makhluk hidup memiliki ciri-ciri khusus yang membedakannya dari benda mati.</p>
+                        `
+                    },
+                    {
+                        title: "🐾 Hewan dan Habitatnya",
+                        icon: "🐾",
+                        content: `
+                            <h4 class="font-semibold mb-2">Jenis-jenis Hewan:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Hewan Darat:</strong> Sapi, kucing, gajah, harimau</li>
+                                <li><strong>Hewan Air:</strong> Ikan, lumba-lumba, paus</li>
+                                <li><strong>Hewan Udara:</strong> Burung, kelelawar, kupu-kupu</li>
+                            </ul>
+                            <p class="text-gray-600">Setiap hewan memiliki habitat yang sesuai dengan kebutuhan hidupnya.</p>
+                        `
+                    },
+                    {
+                        title: "🌿 Tumbuhan dan Bagiannya",
+                        icon: "🌿",
+                        content: `
+                            <h4 class="font-semibold mb-2">Bagian-bagian Tumbuhan:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Akar:</strong> Menyerap air dan mineral dari tanah</li>
+                                <li><strong>Batang:</strong> Menopang tumbuhan dan mengangkut air</li>
+                                <li><strong>Daun:</strong> Tempat fotosintesis (pembuatan makanan)</li>
+                                <li><strong>Bunga:</strong> Alat perkembangbiakan tumbuhan</li>
+                                <li><strong>Buah:</strong> Melindungi biji</li>
+                            </ul>
+                            <p class="text-gray-600">Setiap bagian tumbuhan memiliki fungsi penting untuk kelangsungan hidup.</p>
+                        `
+                    },
+                    {
+                        title: "🍎 Makanan Sehat",
+                        icon: "🍎",
+                        content: `
+                            <h4 class="font-semibold mb-2">4 Sehat 5 Sempurna:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Makanan Pokok:</strong> Nasi, roti, kentang</li>
+                                <li><strong>Lauk Pauk:</strong> Ikan, daging, telur, tahu</li>
+                                <li><strong>Sayuran:</strong> Bayam, kangkung, wortel</li>
+                                <li><strong>Buah-buahan:</strong> Apel, jeruk, pisang</li>
+                                <li><strong>Susu:</strong> Sumber kalsium untuk tulang</li>
+                            </ul>
+                            <p class="text-gray-600">Makan makanan bergizi seimbang penting untuk pertumbuhan yang sehat.</p>
+                        `
+                    },
+                    {
+                        title: "🌍 Lingkungan Hidup",
+                        icon: "🌍",
+                        content: `
+                            <h4 class="font-semibold mb-2">Menjaga Lingkungan:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li>Membuang sampah pada tempatnya</li>
+                                <li>Menanam pohon dan merawat tanaman</li>
+                                <li>Menghemat air dan listrik</li>
+                                <li>Tidak mencemari sungai dan udara</li>
+                                <li>Melindungi hewan dan tumbuhan</li>
+                            </ul>
+                            <p class="text-gray-600">Lingkungan yang bersih dan sehat penting untuk kehidupan semua makhluk hidup.</p>
+                        `
+                    },
+                    {
+                        title: "🦷 Kesehatan Tubuh",
+                        icon: "🦷",
+                        content: `
+                            <h4 class="font-semibold mb-2">Menjaga Kesehatan:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li>Mandi dan sikat gigi secara teratur</li>
+                                <li>Cuci tangan sebelum makan</li>
+                                <li>Olahraga dan istirahat cukup</li>
+                                <li>Makan makanan bergizi</li>
+                                <li>Minum air putih yang cukup</li>
+                            </ul>
+                            <p class="text-gray-600">Kebiasaan hidup sehat harus dimulai sejak kecil.</p>
+                        `
+                    }
+                ]
+            },
+            SMP: {
+                title: "Materi Biologi Sekolah Menengah Pertama",
+                topics: [
+                    {
+                        title: "🔬 Organisasi Kehidupan",
+                        icon: "🔬",
+                        content: `
+                            <h4 class="font-semibold mb-2">Tingkatan Organisasi Kehidupan:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Sel:</strong> Unit terkecil makhluk hidup</li>
+                                <li><strong>Jaringan:</strong> Kumpulan sel sejenis</li>
+                                <li><strong>Organ:</strong> Kumpulan jaringan dengan fungsi tertentu</li>
+                                <li><strong>Sistem Organ:</strong> Kumpulan organ yang bekerja sama</li>
+                                <li><strong>Organisme:</strong> Makhluk hidup utuh</li>
+                            </ul>
+                            <p class="text-gray-600">Organisasi kehidupan tersusun dari tingkat sederhana ke kompleks.</p>
+                        `
+                    },
+                    {
+                        title: "🫀 Sistem Peredaran Darah",
+                        icon: "🫀",
+                        content: `
+                            <h4 class="font-semibold mb-2">Komponen Sistem Peredaran Darah:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Jantung:</strong> Pompa darah dengan 4 ruang</li>
+                                <li><strong>Pembuluh Darah:</strong> Arteri, vena, dan kapiler</li>
+                                <li><strong>Darah:</strong> Plasma, sel darah merah, putih, keping darah</li>
+                            </ul>
+                            <h4 class="font-semibold mb-2 mt-4">Fungsi Darah:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li>Mengangkut oksigen dan nutrisi</li>
+                                <li>Mengangkut sisa metabolisme</li>
+                                <li>Melawan infeksi</li>
+                                <li>Mengatur suhu tubuh</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "🫁 Sistem Pernapasan",
+                        icon: "🫁",
+                        content: `
+                            <h4 class="font-semibold mb-2">Organ Pernapasan:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Hidung:</strong> Menyaring dan menghangatkan udara</li>
+                                <li><strong>Trakea:</strong> Saluran udara utama</li>
+                                <li><strong>Bronkus:</strong> Percabangan trakea</li>
+                                <li><strong>Paru-paru:</strong> Tempat pertukaran gas</li>
+                                <li><strong>Alveolus:</strong> Kantung udara tempat difusi O₂ dan CO₂</li>
+                            </ul>
+                            <p class="text-gray-600">Sistem pernapasan berfungsi mengambil oksigen dan mengeluarkan karbon dioksida.</p>
+                        `
+                    },
+                    {
+                        title: "🍽️ Sistem Pencernaan",
+                        icon: "🍽️",
+                        content: `
+                            <h4 class="font-semibold mb-2">Organ Pencernaan:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Mulut:</strong> Pencernaan mekanis dan kimiawi awal</li>
+                                <li><strong>Kerongkongan:</strong> Saluran makanan ke lambung</li>
+                                <li><strong>Lambung:</strong> Pencernaan protein dengan asam lambung</li>
+                                <li><strong>Usus Halus:</strong> Penyerapan nutrisi utama</li>
+                                <li><strong>Usus Besar:</strong> Penyerapan air dan pembentukan feses</li>
+                            </ul>
+                            <p class="text-gray-600">Sistem pencernaan mengubah makanan menjadi nutrisi yang dapat diserap tubuh.</p>
+                        `
+                    },
+                    {
+                        title: "🌱 Fotosintesis",
+                        icon: "🌱",
+                        content: `
+                            <h4 class="font-semibold mb-2">Proses Fotosintesis:</h4>
+                            <div class="bg-green-50 p-3 rounded mb-4">
+                                <p class="text-center font-mono">6CO₂ + 6H₂O + cahaya → C₆H₁₂O₆ + 6O₂</p>
+                            </div>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Bahan:</strong> Karbon dioksida dan air</li>
+                                <li><strong>Energi:</strong> Cahaya matahari</li>
+                                <li><strong>Tempat:</strong> Kloroplas dalam daun</li>
+                                <li><strong>Hasil:</strong> Glukosa dan oksigen</li>
+                            </ul>
+                            <p class="text-gray-600">Fotosintesis adalah proses pembuatan makanan oleh tumbuhan menggunakan cahaya matahari.</p>
+                        `
+                    },
+                    {
+                        title: "🧬 Pewarisan Sifat",
+                        icon: "🧬",
+                        content: `
+                            <h4 class="font-semibold mb-2">Konsep Dasar Genetika:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Gen:</strong> Unit pewarisan sifat</li>
+                                <li><strong>Kromosom:</strong> Pembawa gen dalam sel</li>
+                                <li><strong>DNA:</strong> Materi genetik</li>
+                                <li><strong>Sifat Dominan:</strong> Sifat yang selalu muncul</li>
+                                <li><strong>Sifat Resesif:</strong> Sifat yang tertutup oleh dominan</li>
+                            </ul>
+                            <p class="text-gray-600">Sifat-sifat makhluk hidup diwariskan dari induk kepada keturunannya melalui gen.</p>
+                        `
+                    }
+                ]
+            },
+            SMA: {
+                title: "Materi Biologi Sekolah Menengah Atas",
+                topics: [
+                    {
+                        title: "🧬 Struktur dan Fungsi DNA",
+                        icon: "🧬",
+                        content: `
+                            <h4 class="font-semibold mb-2">Struktur DNA:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Double Helix:</strong> Struktur spiral ganda</li>
+                                <li><strong>Basa Nitrogen:</strong> Adenin (A), Timin (T), Guanin (G), Sitosin (C)</li>
+                                <li><strong>Pasangan Basa:</strong> A-T (2 ikatan H), G-C (3 ikatan H)</li>
+                                <li><strong>Backbone:</strong> Gula deoksiribosa dan fosfat</li>
+                            </ul>
+                            <h4 class="font-semibold mb-2 mt-4">Replikasi DNA:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li>Semikonservatif (setengah lama, setengah baru)</li>
+                                <li>Enzim helikase membuka double helix</li>
+                                <li>DNA polimerase mensintesis untai baru</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "🔄 Sintesis Protein",
+                        icon: "🔄",
+                        content: `
+                            <h4 class="font-semibold mb-2">Tahapan Sintesis Protein:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Transkripsi:</strong> DNA → mRNA di nukleus</li>
+                                <li><strong>Translasi:</strong> mRNA → Protein di ribosom</li>
+                            </ul>
+                            <h4 class="font-semibold mb-2 mt-4">Kode Genetik:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li>Triplet kodon (3 basa) = 1 asam amino</li>
+                                <li>64 kodon untuk 20 asam amino</li>
+                                <li>Kodon start: AUG (Metionin)</li>
+                                <li>Kodon stop: UAA, UAG, UGA</li>
+                            </ul>
+                            <p class="text-gray-600">Sintesis protein adalah proses pembentukan protein berdasarkan informasi genetik DNA.</p>
+                        `
+                    },
+                    {
+                        title: "⚡ Respirasi Seluler",
+                        icon: "⚡",
+                        content: `
+                            <h4 class="font-semibold mb-2">Tahapan Respirasi Seluler:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Glikolisis:</strong> Glukosa → 2 Piruvat (2 ATP)</li>
+                                <li><strong>Siklus Krebs:</strong> Piruvat → CO₂ (2 ATP)</li>
+                                <li><strong>Transport Elektron:</strong> NADH, FADH₂ → ATP (32-34 ATP)</li>
+                            </ul>
+                            <div class="bg-blue-50 p-3 rounded mb-4">
+                                <p class="text-center font-mono">C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + 36-38 ATP</p>
+                            </div>
+                            <p class="text-gray-600">Respirasi seluler menghasilkan energi (ATP) dari pemecahan glukosa dengan oksigen.</p>
+                        `
+                    },
+                    {
+                        title: "🧪 Enzim dan Metabolisme",
+                        icon: "🧪",
+                        content: `
+                            <h4 class="font-semibold mb-2">Karakteristik Enzim:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Biokatalisator:</strong> Mempercepat reaksi biokimia</li>
+                                <li><strong>Spesifik:</strong> Satu enzim untuk satu substrat</li>
+                                <li><strong>Dapat digunakan berulang</strong></li>
+                                <li><strong>Dipengaruhi pH dan suhu</strong></li>
+                            </ul>
+                            <h4 class="font-semibold mb-2 mt-4">Cara Kerja Enzim:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li>Model Lock and Key</li>
+                                <li>Model Induced Fit</li>
+                                <li>Pembentukan kompleks enzim-substrat</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "🔬 Bioteknologi",
+                        icon: "🔬",
+                        content: `
+                            <h4 class="font-semibold mb-2">Bioteknologi Konvensional:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Fermentasi:</strong> Tempe, tape, yogurt</li>
+                                <li><strong>Pemuliaan:</strong> Hibridisasi tanaman</li>
+                                <li><strong>Kultur Jaringan:</strong> Perbanyakan tanaman</li>
+                            </ul>
+                            <h4 class="font-semibold mb-2 mt-4">Bioteknologi Modern:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Rekayasa Genetika:</strong> Insulin manusia dari bakteri</li>
+                                <li><strong>PCR:</strong> Perbanyakan DNA</li>
+                                <li><strong>Kloning:</strong> Perbanyakan organisme identik</li>
+                                <li><strong>Terapi Gen:</strong> Pengobatan penyakit genetik</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "🌿 Evolusi dan Seleksi Alam",
+                        icon: "🌿",
+                        content: `
+                            <h4 class="font-semibold mb-2">Teori Evolusi Darwin:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li><strong>Variasi:</strong> Perbedaan sifat dalam populasi</li>
+                                <li><strong>Seleksi Alam:</strong> Survival of the fittest</li>
+                                <li><strong>Pewarisan:</strong> Sifat menguntungkan diwariskan</li>
+                                <li><strong>Adaptasi:</strong> Penyesuaian dengan lingkungan</li>
+                            </ul>
+                            <h4 class="font-semibold mb-2 mt-4">Bukti Evolusi:</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-4">
+                                <li>Fosil (paleontologi)</li>
+                                <li>Homologi organ</li>
+                                <li>Embriologi perbandingan</li>
+                                <li>Biogeografi</li>
+                                <li>Biokimia dan molekuler</li>
+                            </ul>
+                        `
+                    }
+                ]
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            checkAuthStatus();
+            generateSampleQuestions();
+        });
+
+        function initializeEventListeners() {
+            // Navigation buttons
+            document.getElementById('loginBtn').addEventListener('click', () => showModal('loginModal'));
+            document.getElementById('registerBtn').addEventListener('click', () => showModal('registerModal'));
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+
+            // Form submissions
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+
+            // Quiz controls
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+            document.getElementById('prevBtn').addEventListener('click', prevQuestion);
+            document.getElementById('submitBtn').addEventListener('click', submitQuiz);
+        }
+
+        function generateSampleQuestions() {
+            // Generate more questions for each level
+            const topics = ['Genetika', 'Fisiologi', 'Biokimia', 'Ekologi', 'Evolusi', 'Biologi Molekuler'];
+            
+            // Generate questions for all levels
+            ['SD', 'SMP', 'SMA'].forEach(level => {
+                if (!questionsDB[level]) questionsDB[level] = {};
+                
+                const maxClass = level === 'SD' ? 6 : 3;
+                for (let cls = 1; cls <= maxClass; cls++) {
+                    if (!questionsDB[level][cls]) questionsDB[level][cls] = {};
+                    
+                    for (let lvl = 1; lvl <= 5; lvl++) {
+                        if (!questionsDB[level][cls][lvl]) {
+                            questionsDB[level][cls][lvl] = generateQuestionsForLevel(level, cls, lvl);
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateQuestionsForLevel(educationLevel, classNum, levelNum) {
+            const questions = [];
+            const topics = ['Genetika', 'Fisiologi', 'Biokimia', 'Ekologi', 'Evolusi', 'Biologi Molekuler'];
+            
+            for (let i = 0; i < 5; i++) {
+                const topic = topics[i % topics.length];
+                questions.push({
+                    question: `Soal ${topic} ${educationLevel} Kelas ${classNum} Level ${levelNum} - Pertanyaan ${i + 1}`,
+                    options: [`Pilihan A`, `Pilihan B`, `Pilihan C`, `Pilihan D`],
+                    correct: Math.floor(Math.random() * 4),
+                    explanation: `Penjelasan untuk soal ${topic} ini menjelaskan konsep dasar yang perlu dipahami siswa.`
+                });
+            }
+            
+            return questions;
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const user = usersDB.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                updateAuthUI();
+                closeModal('loginModal');
+                showNotification('Login berhasil!', 'success');
+            } else {
+                showNotification('Email atau password salah!', 'error');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (usersDB.find(u => u.email === email)) {
+                showNotification('Email sudah terdaftar!', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: usersDB.length + 1,
+                name,
+                email,
+                password,
+                role: 'user',
+                totalScore: 0,
+                completedLevels: {}
+            };
+            
+            usersDB.push(newUser);
+            currentUser = newUser;
+            updateAuthUI();
+            closeModal('registerModal');
+            showNotification('Registrasi berhasil!', 'success');
+        }
+
+        function logout() {
+            currentUser = null;
+            updateAuthUI();
+            showPage('landingPage');
+            showNotification('Logout berhasil!', 'success');
+        }
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+            
+            if (currentUser) {
+                loginBtn.classList.add('hidden');
+                registerBtn.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                userName.textContent = currentUser.name;
+            } else {
+                loginBtn.classList.remove('hidden');
+                registerBtn.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+            }
+        }
+
+        function checkAuthStatus() {
+            // Simulate checking stored auth token
+            updateAuthUI();
+        }
+
+        function selectEducationLevel(level) {
+            if (!currentUser) {
+                showNotification('Silakan login terlebih dahulu!', 'error');
+                showModal('loginModal');
+                return;
+            }
+            
+            currentEducationLevel = level;
+            showLevelSelection();
+        }
+
+        function isLevelUnlocked(educationLevel, classNum, levelNum) {
+            if (!currentUser) return false;
+            
+            // First level of first class is always unlocked
+            if (classNum === 1 && levelNum === 1) return true;
+            
+            const levelKey = `${educationLevel}-${classNum}-${levelNum}`;
+            
+            // Check if previous level is completed
+            if (levelNum > 1) {
+                const prevLevelKey = `${educationLevel}-${classNum}-${levelNum - 1}`;
+                return currentUser.completedLevels[prevLevelKey] === true;
+            }
+            
+            // Check if previous class's last level is completed
+            if (classNum > 1) {
+                const prevClassLastLevelKey = `${educationLevel}-${classNum - 1}-5`;
+                return currentUser.completedLevels[prevClassLastLevelKey] === true;
+            }
+            
+            return false;
+        }
+
+        function showLevelSelection() {
+            const maxClass = currentEducationLevel === 'SD' ? 6 : 3;
+            const levelTitle = document.getElementById('levelTitle');
+            const classSelection = document.getElementById('classSelection');
+            
+            levelTitle.textContent = `${currentEducationLevel} - Pilih Kelas dan Level`;
+            classSelection.innerHTML = '';
+            
+            for (let cls = 1; cls <= maxClass; cls++) {
+                const classCard = document.createElement('div');
+                classCard.className = 'bg-white rounded-lg shadow-lg p-6';
+                
+                let levelsHTML = '';
+                for (let i = 1; i <= 5; i++) {
+                    const isUnlocked = isLevelUnlocked(currentEducationLevel, cls, i);
+                    const isCompleted = currentUser.completedLevels[`${currentEducationLevel}-${cls}-${i}`];
+                    
+                    let buttonClass = '';
+                    let buttonText = `Level ${i}`;
+                    let clickHandler = '';
+                    
+                    if (isCompleted) {
+                        buttonClass = 'bg-green-600 text-white hover:bg-green-700';
+                        buttonText = `✓ Level ${i}`;
+                        clickHandler = `onclick="startQuiz(${cls}, ${i})"`;
+                    } else if (isUnlocked) {
+                        buttonClass = 'bg-primary text-white hover:bg-secondary';
+                        clickHandler = `onclick="startQuiz(${cls}, ${i})"`;
+                    } else {
+                        buttonClass = 'bg-gray-300 text-gray-500 cursor-not-allowed';
+                        buttonText = `🔒 Level ${i}`;
+                        clickHandler = `onclick="showLockedMessage()"`;
+                    }
+                    
+                    levelsHTML += `
+                        <button ${clickHandler} 
+                                class="${buttonClass} p-2 rounded transition-colors">
+                            ${buttonText}
+                        </button>
+                    `;
+                }
+                
+                classCard.innerHTML = `
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Kelas ${cls}</h3>
+                    <div class="grid grid-cols-5 gap-2">
+                        ${levelsHTML}
+                    </div>
+                `;
+                classSelection.appendChild(classCard);
+            }
+            
+            showPage('levelSelection');
+        }
+
+        function showLockedMessage() {
+            showNotification('Level ini terkunci! Selesaikan level sebelumnya terlebih dahulu.', 'error');
+        }
+
+        function startQuiz(classNum, levelNum) {
+            // Check if level is unlocked
+            if (!isLevelUnlocked(currentEducationLevel, classNum, levelNum)) {
+                showLockedMessage();
+                return;
+            }
+            
+            currentClass = classNum;
+            currentLevel = levelNum;
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            score = 0;
+            timeLeft = 300; // 5 minutes
+            
+            // Get questions for this level
+            currentQuestions = questionsDB[currentEducationLevel][classNum][levelNum] || [];
+            
+            if (currentQuestions.length === 0) {
+                showNotification('Soal untuk level ini belum tersedia!', 'error');
+                return;
+            }
+            
+            // Shuffle questions
+            currentQuestions = shuffleArray([...currentQuestions]);
+            
+            showPage('quizPage');
+            updateQuizUI();
+            startTimer();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function updateQuizUI() {
+            const question = currentQuestions[currentQuestionIndex];
+            const quizTitle = document.getElementById('quizTitle');
+            const quizProgress = document.getElementById('quizProgress');
+            const questionText = document.getElementById('questionText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const progressBar = document.getElementById('progressBar');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const scoreDisplay = document.getElementById('score');
+            
+            quizTitle.textContent = `${currentEducationLevel} Kelas ${currentClass} - Level ${currentLevel}`;
+            quizProgress.textContent = `Soal ${currentQuestionIndex + 1} dari ${currentQuestions.length}`;
+            questionText.textContent = question.question;
+            scoreDisplay.textContent = `Skor: ${score}`;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Generate options
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-item';
+                optionDiv.innerHTML = `
+                    <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="answer" value="${index}" class="mr-3" 
+                               ${userAnswers[currentQuestionIndex] === index ? 'checked' : ''}>
+                        <span class="text-gray-800">${String.fromCharCode(65 + index)}. ${option}</span>
+                    </label>
+                `;
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Add event listeners to options
+            const radioButtons = optionsContainer.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    userAnswers[currentQuestionIndex] = parseInt(e.target.value);
+                });
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === currentQuestions.length - 1) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                updateQuizUI();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                updateQuizUI();
+            }
+        }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById('timer');
+            
+            quizTimer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(quizTimer);
+                    submitQuiz();
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
+
+        function submitQuiz() {
+            clearInterval(quizTimer);
+            
+            // Calculate score
+            let correctAnswers = 0;
+            const results = [];
+            
+            currentQuestions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                
+                if (isCorrect) {
+                    correctAnswers++;
+                    score += 20; // 20 points per correct answer
+                }
+                
+                results.push({
+                    question: question.question,
+                    userAnswer: userAnswer !== undefined ? question.options[userAnswer] : 'Tidak dijawab',
+                    correctAnswer: question.options[question.correct],
+                    isCorrect,
+                    explanation: question.explanation
+                });
+            });
+            
+            // Update user's total score and mark level as completed
+            if (currentUser) {
+                currentUser.totalScore += score;
+                
+                // Mark level as completed if user got at least 60% correct
+                const passPercentage = (correctAnswers / currentQuestions.length) * 100;
+                if (passPercentage >= 60) {
+                    const levelKey = `${currentEducationLevel}-${currentClass}-${currentLevel}`;
+                    currentUser.completedLevels[levelKey] = true;
+                }
+            }
+            
+            showResults(results, correctAnswers);
+        }
+
+        function showResults(results, correctAnswers) {
+            const finalScore = document.getElementById('finalScore');
+            const finalDetails = document.getElementById('finalDetails');
+            const correctAnswersDisplay = document.getElementById('correctAnswers');
+            const wrongAnswers = document.getElementById('wrongAnswers');
+            const answerReview = document.getElementById('answerReview');
+            
+            const passPercentage = (correctAnswers / currentQuestions.length) * 100;
+            const isPassed = passPercentage >= 60;
+            
+            finalScore.textContent = `${score} Poin`;
+            finalDetails.innerHTML = `
+                ${correctAnswers} dari ${currentQuestions.length} soal benar (${passPercentage.toFixed(1)}%)<br>
+                <span class="${isPassed ? 'text-green-600' : 'text-red-600'} font-semibold">
+                    ${isPassed ? '✅ Level Selesai! Level berikutnya terbuka.' : '❌ Belum Lulus. Minimal 60% untuk membuka level berikutnya.'}
+                </span>
+            `;
+            correctAnswersDisplay.textContent = correctAnswers;
+            wrongAnswers.textContent = currentQuestions.length - correctAnswers;
+            
+            // Generate answer review
+            answerReview.innerHTML = '';
+            results.forEach((result, index) => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `p-4 border rounded-lg ${result.isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`;
+                reviewItem.innerHTML = `
+                    <div class="font-semibold mb-2">Soal ${index + 1}: ${result.question}</div>
+                    <div class="text-sm mb-1">Jawaban Anda: <span class="${result.isCorrect ? 'text-green-600' : 'text-red-600'}">${result.userAnswer}</span></div>
+                    <div class="text-sm mb-2">Jawaban Benar: <span class="text-green-600">${result.correctAnswer}</span></div>
+                    <div class="text-sm text-gray-600">${result.explanation}</div>
+                `;
+                answerReview.appendChild(reviewItem);
+            });
+            
+            showPage('resultsPage');
+        }
+
+        function restartQuiz() {
+            startQuiz(currentClass, currentLevel);
+        }
+
+        function goToLevelSelection() {
+            showLevelSelection();
+        }
+
+        function goBack() {
+            showPage('landingPage');
+        }
+
+        function goHome() {
+            showPage('landingPage');
+            // Reset any quiz state if needed
+            currentEducationLevel = '';
+            currentClass = 0;
+            currentLevel = 0;
+            currentQuestionIndex = 0;
+            currentQuestions = [];
+            userAnswers = [];
+            score = 0;
+            if (quizTimer) {
+                clearInterval(quizTimer);
+            }
+        }
+
+        function showPage(pageId) {
+            const pages = ['landingPage', 'levelSelection', 'quizPage', 'resultsPage', 'leaderboard', 'materialsPage'];
+            pages.forEach(page => {
+                document.getElementById(page).classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function showMaterials() {
+            // Hide material content and show level selection
+            document.getElementById('materialContent').classList.add('hidden');
+            showPage('materialsPage');
+        }
+
+        function showMaterialLevel(level) {
+            const materialData = materialsDB[level];
+            const materialTitle = document.getElementById('materialTitle');
+            const materialTopics = document.getElementById('materialTopics');
+            
+            materialTitle.textContent = materialData.title;
+            materialTopics.innerHTML = '';
+            
+            materialData.topics.forEach(topic => {
+                const topicCard = document.createElement('div');
+                topicCard.className = 'bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow';
+                topicCard.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <span class="text-2xl mr-3 ${getAnimationClass()}">${topic.icon}</span>
+                        <h4 class="text-lg font-bold text-gray-800">${topic.title}</h4>
+                    </div>
+                    <div class="text-gray-700 text-sm leading-relaxed">
+                        ${topic.content}
+                    </div>
+                `;
+                materialTopics.appendChild(topicCard);
+            });
+            
+            document.getElementById('materialContent').classList.remove('hidden');
+        }
+
+        function getAnimationClass() {
+            const animations = [
+                'animate-bounce-gentle',
+                'animate-pulse-glow',
+                'animate-wiggle',
+                'animate-rotate-slow'
+            ];
+            return animations[Math.floor(Math.random() * animations.length)];
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Admin Functions (for demo purposes)
+        function showLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            const sortedUsers = usersDB
+                .filter(user => user.role === 'user')
+                .sort((a, b) => b.totalScore - a.totalScore);
+            
+            leaderboardList.innerHTML = '';
+            sortedUsers.forEach((user, index) => {
+                const item = document.createElement('div');
+                item.className = 'flex justify-between items-center p-4 border rounded-lg';
+                item.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="text-2xl mr-4">${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}</div>
+                        <div>
+                            <div class="font-semibold">${user.name}</div>
+                            <div class="text-gray-600">${user.email}</div>
+                        </div>
+                    </div>
+                    <div class="text-xl font-bold text-primary">${user.totalScore}</div>
+                `;
+                leaderboardList.appendChild(item);
+            });
+            
+            showPage('leaderboard');
+        }
+
+        // Add navigation buttons (for demo)
+        document.addEventListener('DOMContentLoaded', function() {
+            const nav = document.querySelector('nav .flex.items-center.space-x-4');
+            
+            // Add Materials button
+            const materialsBtn = document.createElement('button');
+            materialsBtn.textContent = '📚 Materi';
+            materialsBtn.className = 'text-gray-600 hover:text-primary transition-colors';
+            materialsBtn.onclick = showMaterials;
+            nav.insertBefore(materialsBtn, nav.firstChild);
+            
+            // Add Leaderboard button
+            const leaderboardBtn = document.createElement('button');
+            leaderboardBtn.textContent = '🏆 Leaderboard';
+            leaderboardBtn.className = 'text-gray-600 hover:text-primary transition-colors';
+            leaderboardBtn.onclick = showLeaderboard;
+            nav.insertBefore(leaderboardBtn, nav.firstChild);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96388ec987f15f39',t:'MTc1MzI0NjIzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<!-- Firebase App (modular SDK) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDO7lFkocr9hK8BpAiZ18OdftJnX9rpBGY",
+    authDomain: "mnmn-4773a.firebaseapp.com",
+    databaseURL: "https://mnmn-4773a-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "mnmn-4773a",
+    storageBucket: "mnmn-4773a.firebasestorage.app",
+    messagingSenderId: "615109654325",
+    appId: "1:615109654325:web:910e5247cb4373030b7e7c",
+    measurementId: "G-F9KECTMJPL"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
+</body>
+</html>
